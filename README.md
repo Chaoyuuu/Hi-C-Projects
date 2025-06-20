@@ -40,6 +40,41 @@ Note: If an error related to libffi occurs during the installation or use of ``h
 conda install -c anaconda libffi
 
 ```
+# HiSV new version
+We have released a new version of HiSV that detects structural variations directly from .hic files, removing the need for intermediate matrices. The previous version remains available for compatibility.
+* __runHiSV_hic__
+```
+usage: runHiSV_hic [-h] [--hic_file HIC_FILE]
+                   [--intra_resolution INTRA_RESOLUTION]
+                   [--inter_resolution INTER_RESOLUTION] [--window WINDOW]
+                   [--regularization REGULARIZATION] [--cutoff CUTOFF]
+                   [--cores CORES] [--output OUTPUT]
+
+Identification of SVs based on Hi-C interaction matrix.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --hic_file HIC_FILE   The hi-c file based on .hic format. (default: None)
+  --intra_resolution INTRA_RESOLUTION
+                        Resolution of intra Hi-C contact matrix. (default:
+                        50000)
+  --inter_resolution INTER_RESOLUTION
+                        Resolution of inter Hi-C contact matrix. (default:
+                        100000)
+  --window WINDOW       Local region window. (default: 10)
+  --regularization REGULARIZATION
+                        The regularization parameter (default: 0.2)
+  --cutoff CUTOFF       Threshold for filtering SV segments (default: 0.6)
+  --cores CORES         The number of cores used for parallel computing
+                        (default: None)
+  --output OUTPUT       Output file path. (default: None)
+```
+### Example of running HiSV using `.hic` format data:
+```
+$runHiSV_hic --hic_file /mnt/e/HiSV_dataset/Dataset2/HCC1937/GSM4417584_HCC1937_b38d5.hic --output /mnt/e/HiSV_dataset/Dataset2/HCC1937/HCC1937_HiSV_result.txt --cores 20
+```
+The file `GSM4417584_HCC1937_b38d5.hic` can be downloaded from [https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM4417584](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM4417584).
+
 # Overview
 HiSV is distributed with four scripts. You can learn the basic usage of each script by typing command [-h] in a terminal window, where "command" is one of the following script names:
 * __hiccovert__  
