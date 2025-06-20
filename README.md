@@ -41,7 +41,13 @@ conda install -c anaconda libffi
 
 ```
 # HiSV new version
-We have released a new version of HiSV that detects structural variations directly from .hic files, removing the need for intermediate matrices. The previous version remains available for compatibility.
+We have released a new version of **HiSV** (v2.0.0) that detects structural variations directly from `.hic` files, removing the need for intermediate matrices. The previous version remains available for compatibility.  
+To install or upgrade to the latest version, simply run:
+
+```bash
+pip install hisv -U
+```
+
 * __runHiSV_hic__
 ```
 usage: runHiSV_hic [-h] [--hic_file HIC_FILE]
