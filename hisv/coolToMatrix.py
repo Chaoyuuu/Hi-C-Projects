@@ -50,11 +50,13 @@ def dumpMatrix(binSize, coolfile, binsInfo, chrom1, chrom2, outdir, name):
 
     chrom1start, chrom1end = binsInfo[chrom1]
     chrom2start, chrom2end = binsInfo[chrom2]
-    if 'chr' not in chrom1:
-        outputname = os.path.join(outdir, name + '_%skb_%s_%s_matrix.txt' % (str(binSize // 1000),
-                                                                             'chr'+chrom1, 'chr'+chrom2))
-    else:
-        outputname = os.path.join(outdir, name + '_%skb_%s_%s_matrix.txt' % (str(binSize // 1000), chrom1, chrom2))
+    outputname = os.path.join(outdir, name + '_%skb_%s_%s_matrix.txt' % (str(binSize // 1000), chrom1, chrom2))
+
+    # if 'chr' not in chrom1:
+    #     outputname = os.path.join(outdir, name + '_%skb_%s_%s_matrix.txt' % (str(binSize // 1000),
+    #                                                                          'chr'+chrom1, 'chr'+chrom2))
+    # else:
+    #     outputname = os.path.join(outdir, name + '_%skb_%s_%s_matrix.txt' % (str(binSize // 1000), chrom1, chrom2))
 
     # matrixName = '_'.join([name, str(resolution)+'kb',chrom1,chrom2,"InterMap_matrix.txt"])
     # matrixfile = os.path.join(outdir,matrixName)
@@ -92,12 +94,15 @@ def coolToMatrix(matrixFile, ref_file, binSize, outdir, name, n_cores):
             else:
                 outdir = outdir_inter
 
-            if 'chr' not in next(iter(binsInfo)):
-                chrom1 = chr_id[i].lstrip('chr')
-                chrom2 = chr_id[j].lstrip('chr')
-            else:
-                chrom1 = chr_id[i]
-                chrom2 = chr_id[j]
+            chrom1 = chr_id[i]
+            chrom2 = chr_id[j]
+
+            # if 'chr' not in next(iter(binsInfo)):
+            #     chrom1 = chr_id[i].lstrip('chr')
+            #     chrom2 = chr_id[j].lstrip('chr')
+            # else:
+            #     chrom1 = chr_id[i]
+            #     chrom2 = chr_id[j]
             print('chroms: ', chrom1, chrom2)
             # dumpMatrix(binSize, coolfile, binsInfo, chrom1, chrom2, outdir, name)
             p.apply_async(dumpMatrix, args=(binSize, coolfile, binsInfo, chrom1, chrom2, outdir, name))

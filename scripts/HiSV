@@ -127,7 +127,7 @@ def call_intra_sv(i, chr_id, chr_intra_count, chr_inter_count, intra_hicfile, in
     intra_pos2 = []
     for j in range(i, len(chr_id)):
         chrlist = [chr_id[i], chr_id[j]]
-        print("Read Hi-C matrix file: ", chrlist)
+        # print("Read Hi-C matrix file: ", chrlist)
 
         if i == j:
             # intra_chromosomal
@@ -138,8 +138,9 @@ def call_intra_sv(i, chr_id, chr_intra_count, chr_inter_count, intra_hicfile, in
                                                                                          chr_id[i], chr_id[j]))
             print(matrix_file)
             contact_matrix = np.loadtxt(matrix_file)
-            if np.shape(contact_matrix)[0] != chr_intra_count[i]:
-                print("The binsize setting does not match the matrix file.")
+            if np.ndim(contact_matrix) == 0 or np.shape(contact_matrix)[0] != chr_intra_count[i]:
+                print(f"The binsize setting does not match the matrix file: {matrix_file}")
+                continue
                 sys.exit(-1)
             raw_num = np.shape(contact_matrix)[0]
             il = np.tril_indices(raw_num)
@@ -170,8 +171,10 @@ def call_intra_sv(i, chr_id, chr_intra_count, chr_inter_count, intra_hicfile, in
                                                                                          chr_id[i], chr_id[j]))
             print(matrix_file)
             contact_matrix = np.loadtxt(matrix_file)
-            if np.shape(contact_matrix)[0] != chr_inter_count[i] or np.shape(contact_matrix)[1] != chr_inter_count[j]:
-                print("The binsize setting does not match the matrix file.")
+            if contact_matrix.ndim <= 1 or np.shape(contact_matrix)[0] != chr_inter_count[i] or np.shape(contact_matrix)[1] != chr_inter_count[j]:
+                print(f"[inter] chA: {chr_id[i]}, chB: {chr_id[j]}, count={chr_inter_count[i]}x{chr_inter_count[j]}, sum={np.sum(contact_matrix)}") 
+                print(f"The binsize setting does not match the matrix file: {matrix_file}")
+                continue
                 sys.exit(-1)
             raw_num = np.shape(contact_matrix)[0]
             col_num = np.shape(contact_matrix)[1]
@@ -273,7 +276,7 @@ def run_HiSV(ref_file, inter_binSize, intra_binSize, win, reg, cutoff, n_cores, 
                 matrix_file = os.path.join(inter_hicfile, name + '_%skb_%s_%s_matrix.txt' % (str(inter_binSize // 1000),
                                                                                              chr_id[i], chr_id[j]))
             if not os.path.exists(matrix_file):
-                print("The required matrix file should exist in the current folder.")
+                print(f"The required matrix file should exist in the current folder. File: {matrix_file}")
                 return "Matrix file Error."
 
     # the number of chrom
@@ -342,7 +345,6 @@ def run_HiSV(ref_file, inter_binSize, intra_binSize, win, reg, cutoff, n_cores, 
 
 
 if __name__ == '__main__':
-
     start_t = datetime.datetime.now()
     args, commands = getargs()
 
