@@ -127,7 +127,6 @@ def call_intra_sv(i, chr_id, chr_intra_count, chr_inter_count, intra_hicfile, in
     intra_pos2 = []
     for j in range(i, len(chr_id)):
         chrlist = [chr_id[i], chr_id[j]]
-        # print("Read Hi-C matrix file: ", chrlist)
 
         if i == j:
             # intra_chromosomal
