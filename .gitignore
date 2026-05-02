@@ -1,0 +1,9 @@
+__pycache__/
+*.py[cod]
+
+
+/HiSV/data
+/HiSV/result
+
+/Hic-Breakfinder/data
+/Hic-Breakfinder/result
