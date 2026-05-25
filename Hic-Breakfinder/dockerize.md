@@ -5,18 +5,17 @@ To learn how to use hic_breakfinder, please check out the original repo: https:/
 ## 🚀 Build with docker
 1. Build the Docker Image:
 ```bash
-docker build -t hic_breakfinder:1.0 .
+docker build -t hic_breakfinder .
 ```
 
 2. Verify installation:
 ```bash
-docker run --rm -it -v ./test_data:/app hic_breakfinder
+docker run --rm -it -v ./hic-breakfinder-data:/app hic_breakfinder
 ```
 You should see something like this:
 ```bash
 unalee@biodepot-uwt:~/Hi-C-Project/Hic-Breakfinder$ docker run --rm -it -v ./hic-breakfinder-data:/app hic_breakfinder
-
-./hic_breakfinder
+root@859b6fd05bc7:/app#
 
 Required options:
 
@@ -25,10 +24,11 @@ Required options:
 --exp-file-intra [Intra-chromosomal 100kb expectation file]
 --name [output file name prefix, will append with *.super_matrix.txt and *.SR.txt]
 ```
-Verify with testing data:
-Step1: Run `mkdir hic-breakfinder-data && cd hic-breakfinder-data` 
-Step2: Downlaod three files `K562_in_house_b38d5.nodup.bam`, `intra_expect_100kb.hg38.txt` and `inter_expect_1Mb.hg38.txt` from https://salkinstitute.app.box.com/s/m8oyv2ypf8o3kcdsybzcmrpg032xnrgx it into `/hic-breakfinder-data`
-Step2: Run
+
+3. Verify with testing data:
+- Step1: Run `mkdir hic-breakfinder-data && cd hic-breakfinder-data` 
+- Step2: Downlaod three files `K562_in_house_b38d5.nodup.bam`, `intra_expect_100kb.hg38.txt` and `inter_expect_1Mb.hg38.txt` from https://salkinstitute.app.box.com/s/m8oyv2ypf8o3kcdsybzcmrpg032xnrgx it into `/hic-breakfinder-data`
+- Step3: Run Testing Dataset
 ```bash
 # Start container
 unalee@biodepot-uwt:~/Hi-C-Project/Hic-Breakfinder$ docker run --rm -it -v ./hic-breakfinder-data:/app hic_breakfinder
@@ -72,6 +72,18 @@ hic_breakfinder \
   --exp-file-intra {INTRA_FILE} \
   --name {OUTPUT_PREFIX}
 ```
+
+4. (Optional) Run with Sunflower
+```
+docker run --rm -it -v {PATH-TO-BAM}/SRR11016318.bam:/app/SRR11016318.bam -v ./hic-breakfinder-data:/app hic_breakfinder
+
+hic_breakfinder \
+  --bam-file SRR11016318.bam \
+  --exp-file-inter inter_expect_1Mb.hg38.txt \
+  --exp-file-intra intra_expect_100kb.hg38.txt \
+  --name demo
+```
+
 
 
 ## 🧪 (Option) Manual Installation (Linux/Ubuntu)
