@@ -48,6 +48,9 @@ COPY --from=builder /usr/local/lib/libbamtools* /usr/local/lib/
 # Update library cache so it can find libbamtools
 RUN ldconfig
 
+WORKDIR /app
+CMD ["/bin/bash"]
+
 # Set the default command
-ENTRYPOINT ["hic_breakfinder"]
+#ENTRYPOINT ["hic_breakfinder"]
 

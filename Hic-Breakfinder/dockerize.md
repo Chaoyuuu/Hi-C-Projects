@@ -10,12 +10,12 @@ docker build -t hic_breakfinder:1.0 .
 
 2. Verify installation:
 ```bash
-docker run --rm hic_breakfinder:1.0 --help
+docker run --rm -it -v ./test_data:/app hic_breakfinder
 ```
 You should see something like this:
 ```bash
-unalee@biodepot-uwt:~/Hi-C-Project/Hic-Breakfinder$ docker run --rm hic_breakfinder:1.0 --help
-hic_breakfinder: unrecognized option '--help'
+unalee@biodepot-uwt:~/Hi-C-Project/Hic-Breakfinder$ docker run --rm -it -v ./hic-breakfinder-data:/app hic_breakfinder
+
 ./hic_breakfinder
 
 Required options:
@@ -25,6 +25,31 @@ Required options:
 --exp-file-intra [Intra-chromosomal 100kb expectation file]
 --name [output file name prefix, will append with *.super_matrix.txt and *.SR.txt]
 ```
+Verify with testing data:
+Step1: Run `mkdir hic-breakfinder-data && cd hic-breakfinder-data` 
+Step2: Downlaod three files `K562_in_house_b38d5.nodup.bam`, `intra_expect_100kb.hg38.txt` and `inter_expect_1Mb.hg38.txt` from https://salkinstitute.app.box.com/s/m8oyv2ypf8o3kcdsybzcmrpg032xnrgx it into `/hic-breakfinder-data`
+Step2: Run
+```bash
+# Start container
+unalee@biodepot-uwt:~/Hi-C-Project/Hic-Breakfinder$ docker run --rm -it -v ./hic-breakfinder-data:/app hic_breakfinder
+
+# Run hic-breakfinder
+hic_breakfinder \
+  --bam-file K562_in_house_b38d5.nodup.bam \
+  --exp-file-inter inter_expect_1Mb.hg38.txt \
+  --exp-file-intra intra_expect_100kb.hg38.txt \
+  --name demo
+```
+If success, you can see files start with `demo` in the `/hic-breakfinder-data` directory.
+```
+(base) unalee@biodepot-uwt:~/Hi-C-Project/Hic-Breakfinder/test-data$ ls
+demo_100kb.bias_vector.txt        demo_100kb.super_matrix.txt  demo_10kb.super_matrix.norm.txt  demo_1Mb.super_matrix.norm.eig.txt  intra_expect_100kb.hg38.txt
+demo_100kb.breaks.txt             demo_10kb.bias_vector.txt    demo_10kb.super_matrix.txt       demo_1Mb.super_matrix.norm.txt      K562_in_house_b38d5.nodup.bam
+demo_100kb_intra.breaks.txt       demo_10kb.breaks.txt         demo_1Mb.bias_vector.txt         demo_1Mb.super_matrix.txt
+demo_100kb.SR.txt                 demo_10kb_intra.breaks.txt   demo_1Mb.breaks.txt              demo.breaks.txt
+demo_100kb.super_matrix.norm.txt  demo_10kb.SR.txt             demo_1Mb.SR.txt                  inter_expect_1Mb.hg38.txt
+```
+
 
 3. Usage
 Input Requirements: You need three primary files for a successful run:
@@ -32,14 +57,22 @@ Input Requirements: You need three primary files for a successful run:
 - **Inter-chromosomal Expectations**: Expected background noise between chromosomes.
 - **Intra-chromosomal Expectations**: Expected background noise within chromosomes.
 
-Place your input files in a local directory (e.g., `~/my_data`) and run:
+> Hic-Breaker has provided **Inter-chromosomal Expectations** and **Intra-chromosomal Expectations** files.
+> You can download from: https://salkinstitute.app.box.com/s/m8oyv2ypf8o3kcdsybzcmrpg032xnrgx
+
+Place your input files in a local directory (e.g., `/hic-breakfinder-data`) and run this in the docker bash:
 ```bash
-docker run --rm -v ~/my_data:/data hic_breakfinder:1.0 \
-  -b /data/input.bam \
-  -e /data/inter_expectations.txt \
-  -i /data/intra_expectations.txt \
-  -o /data/output_results.txt
+docker run --rm -it -v ./hic-breakfinder-data:/app hic_breakfinder
+`
+Than run:
+```bash
+hic_breakfinder \
+  --bam-file {INPUT_BAM} \
+  --exp-file-inter {INTER_FILE} \
+  --exp-file-intra {INTRA_FILE} \
+  --name {OUTPUT_PREFIX}
 ```
+
 
 ## 🧪 (Option) Manual Installation (Linux/Ubuntu)
 If you prefer to run locally, follow these steps:
